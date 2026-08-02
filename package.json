@@ -1,0 +1,23 @@
+{
+  "name": "wiki-plugin-lexon",
+  "version": "0.1.0",
+  "description": "Lexon contract source item — interactive syntax highlighting with clickable clause and term links, and switchable emphasis lenses",
+  "type": "module",
+  "main": "client/lexon.js",
+  "files": ["client", "pages", "factory.json"],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "keywords": "node tools/gen-keywords.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "highlight.js": "^11.11.1"
+  },
+  "author": "David Bovill",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-lexon.git" },
+  "bugs": { "url": "https://github.com/Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-lexon/issues" },
+  "homepage": "https://github.com/Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-lexon#readme"
+}

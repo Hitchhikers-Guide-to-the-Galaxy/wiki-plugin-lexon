@@ -1,0 +1,43 @@
+{
+  "title": "About Lexon Plugin",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "8a2b70d5e743d614",
+      "text": "The Lexon plugin renders [[Lexon]] contract source with interactive syntax highlighting. Clause names, parties and defined terms become clickable wiki links — click one to open (or create) its page in the lineup, growing a [[Dictionary of Clauses]] one contract at a time. Keywords recede like prose and pop colour on rollover; emphasis lenses switch what stands out."
+    },
+    {
+      "type": "lexon",
+      "id": "75587954a0768ad9",
+      "text": "LEX Escrow.\n\n\"Payer\" is a person.\n\"Payee\" is a person.\n\"Arbiter\" is a person.\n\"Fee\" is an amount.\n\nThe Payer pays an amount into escrow, appoints the Payee, appoints the Arbiter, and fixes the Fee.\n\nCLAUSE: Pay Out.\nThe Arbiter may pay from escrow the Fee to themselves, and afterwards pay the remainder of the escrow to the Payee.\n\nCLAUSE: Pay Back.\nThe Arbiter may pay from escrow the Fee to themselves, and afterwards return the remainder of the escrow to the Payer."
+    },
+    {
+      "type": "markdown",
+      "id": "0c337297c8688a0a",
+      "text": "# Commands\n\nAn item holds raw Lexon source — paste a `.lex` file and it just works. Optional UPPERCASE header lines above the source:\n\n- EMPHASIS clauses — default lens: all, clauses, terms, none\n- CONTRACT, SOURCE, ROLE, MODE — reserved for coming phases (compile tabs, play mode)\n\nHover the item to reveal the lens chips (All · Clauses · Terms · None). Shift-click a name link to open its page at the end of the lineup."
+    },
+    {
+      "type": "markdown",
+      "id": "943a9726339f4f33",
+      "text": "# See\n\n- [[Lexon]]\n- [[Executable Contract]]\n- [[Lexon Examples]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "About Lexon Plugin",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "8a2b70d5e743d614",
+            "text": "The Lexon plugin renders [[Lexon]] contract source with interactive syntax highlighting."
+          }
+        ]
+      },
+      "date": 1785151487226,
+      "provenance": "Authored by an AI agent — Claude Code via the [[fedwiki-create-plugin]] skill. [https://claude.com/claude-code Claude Code]"
+    }
+  ],
+  "plugin": "lexon"
+}

@@ -1,0 +1,132 @@
+/* Lexon item theme — ALL appearance lives here as custom properties and
+   [data-lens] states; the renderer emits only semantic classes. Experiment by
+   editing this file, not the JS. Scoped under .lexon-wrap throughout. */
+
+.lexon-wrap {
+  --lx-clause: #7c3aed;   /* clause names — the stars of the show */
+  --lx-party: #0f766e;    /* defined persons */
+  --lx-term: #b45309;     /* defined amounts, texts, times */
+  --lx-contract: #1d4ed8; /* the LEX contract name */
+  --lx-keyword: #6b7280;  /* Lexon's English keywords — recede by default */
+  --lx-section: #334155;
+  --lx-string: #166534;
+  --lx-comment: #9ca3af;
+  --lx-muted: 0.55;
+  position: relative;
+}
+
+.lexon-wrap pre.lx-source {
+  background: #f8f8f6;
+  border: 1px solid #e5e5e0;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  line-height: 1.55;
+  color: #1f2937;
+}
+
+/* ---- token classes (hljs classPrefix 'lx-') ---- */
+.lexon-wrap .lx-keyword { color: var(--lx-keyword); transition: color 0.15s; }
+.lexon-wrap .lx-section { color: var(--lx-section); font-weight: 600; }
+.lexon-wrap .lx-title   { color: var(--lx-clause); font-weight: 700; }
+.lexon-wrap .lx-string  { color: var(--lx-string); }
+.lexon-wrap .lx-symbol  { color: var(--lx-term); }
+.lexon-wrap .lx-comment { color: var(--lx-comment); font-style: italic; }
+.lexon-wrap .lx-number  { color: var(--lx-term); }
+
+/* ---- name links: canonical a.internal, coloured by kind ---- */
+.lexon-wrap a.lx-name {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+.lexon-wrap a.lx-clause   { color: var(--lx-clause); }
+.lexon-wrap a.lx-party    { color: var(--lx-party); }
+.lexon-wrap a.lx-term     { color: var(--lx-term); }
+.lexon-wrap a.lx-contract { color: var(--lx-contract); }
+
+/* ---- lenses ---- */
+/* all (default): everything coloured, keywords already muted by palette */
+
+/* clauses: only clause structure pops; names/terms/keywords fade to prose */
+.lexon-wrap[data-lens='clauses'] .lx-keyword,
+.lexon-wrap[data-lens='clauses'] .lx-string,
+.lexon-wrap[data-lens='clauses'] .lx-symbol,
+.lexon-wrap[data-lens='clauses'] .lx-number,
+.lexon-wrap[data-lens='clauses'] a.lx-party,
+.lexon-wrap[data-lens='clauses'] a.lx-term,
+.lexon-wrap[data-lens='clauses'] a.lx-contract {
+  color: inherit;
+  opacity: var(--lx-muted);
+  font-weight: inherit;
+}
+
+/* terms: parties + terms pop; clause headings and keywords fade */
+.lexon-wrap[data-lens='terms'] .lx-keyword,
+.lexon-wrap[data-lens='terms'] .lx-title,
+.lexon-wrap[data-lens='terms'] .lx-section,
+.lexon-wrap[data-lens='terms'] a.lx-clause {
+  color: inherit;
+  opacity: var(--lx-muted);
+  font-weight: inherit;
+}
+
+/* none: plain legal prose — colour only ever appears on rollover */
+.lexon-wrap[data-lens='none'] .lx-keyword,
+.lexon-wrap[data-lens='none'] .lx-section,
+.lexon-wrap[data-lens='none'] .lx-title,
+.lexon-wrap[data-lens='none'] .lx-string,
+.lexon-wrap[data-lens='none'] .lx-symbol,
+.lexon-wrap[data-lens='none'] .lx-number,
+.lexon-wrap[data-lens='none'] .lx-comment,
+.lexon-wrap[data-lens='none'] a.lx-name {
+  color: inherit;
+  opacity: 1;
+  font-weight: inherit;
+  font-style: inherit;
+}
+.lexon-wrap[data-lens='none'] a.lx-name { text-decoration-color: #d1d5db; }
+
+/* ---- rollover reveals: muted things pop their colour on hover ---- */
+.lexon-wrap .lx-keyword:hover { color: #374151; opacity: 1; }
+.lexon-wrap[data-lens] .lx-keyword:hover,
+.lexon-wrap[data-lens] a.lx-name:hover,
+.lexon-wrap[data-lens='none'] .lx-title:hover,
+.lexon-wrap[data-lens='none'] .lx-string:hover,
+.lexon-wrap[data-lens='none'] .lx-symbol:hover { opacity: 1; }
+.lexon-wrap[data-lens='none'] a.lx-clause:hover   { color: var(--lx-clause); }
+.lexon-wrap[data-lens='none'] a.lx-party:hover    { color: var(--lx-party); }
+.lexon-wrap[data-lens='none'] a.lx-term:hover     { color: var(--lx-term); }
+.lexon-wrap[data-lens='none'] a.lx-contract:hover { color: var(--lx-contract); }
+.lexon-wrap[data-lens='clauses'] a.lx-name:hover,
+.lexon-wrap[data-lens='terms'] a.lx-name:hover { color: revert-layer; }
+.lexon-wrap[data-lens='clauses'] a.lx-party:hover { color: var(--lx-party); }
+.lexon-wrap[data-lens='clauses'] a.lx-term:hover  { color: var(--lx-term); }
+.lexon-wrap[data-lens='terms'] a.lx-clause:hover  { color: var(--lx-clause); }
+
+/* ---- lens chips ---- */
+.lexon-wrap .lx-lenses {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+}
+.lexon-wrap:hover .lx-lenses { opacity: 1; }
+.lexon-wrap .lx-lens {
+  cursor: pointer;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: #eceae4;
+  color: #6b7280;
+  user-select: none;
+}
+.lexon-wrap .lx-lens.lx-active { background: #4b5563; color: #fff; }
