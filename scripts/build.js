@@ -1,6 +1,17 @@
 import esbuild from 'esbuild'
 import { writeFileSync } from 'node:fs'
 
+// The modern face (Dual Publish, as wiki-plugin-date): a plain ES module.
+esbuild.build({
+  entryPoints: ['src/client/lexon-modern.js'],
+  bundle: true,
+  format: 'esm',
+  outfile: 'client/lexon.mjs',
+  sourcemap: true,
+  minify: true,
+  loader: { '.css': 'text' },
+}).then(() => console.log('built client/lexon.mjs (modern)'))
+
 esbuild
   .build({
     entryPoints: ['src/client/lexon.js'],

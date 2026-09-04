@@ -1,0 +1,75 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Lexon",
+    "version": "0.2.0",
+    "description": "Compile and run the Lexon contract held by a page's lexon item, and project its permission table. The compiler is the Lexon JavaScript target on the farm host; the behaviour table is a code item on the page holding JSON with a `scenarios` array, in the shape of the conformance harness (targets/lexon in the Plank by Plank repository). Every operation is asked at a site and answers for that site's pages."
+  },
+  "paths": {
+    "/compile.json": {
+      "get": {
+        "operationId": "compile",
+        "summary": "Compile a page's lexon item to its JavaScript class",
+        "description": "Reads the first lexon item of the page (or the item named by id), strips the item's UPPERCASE header lines, runs the Lexon compiler's JavaScript target, and answers with the class source, its constructor parameters and clause methods — or the compiler's own error line. Read-only.",
+        "x-fedwiki-read-only": true,
+        "x-fedwiki-context": ["origin", "status"],
+        "parameters": [
+          {"name": "slug", "in": "query", "required": true, "description": "The page whose lexon item to compile.", "schema": {"type": "string"}},
+          {"name": "id", "in": "query", "required": false, "description": "A lexon item id, when the page holds more than one.", "schema": {"type": "string"}}
+        ],
+        "responses": {"200": {"description": "The compiled class, or the compiler's error.", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Compiled"}}}}}
+      }
+    },
+    "/run.json": {
+      "get": {
+        "operationId": "run",
+        "summary": "Run a page's behaviour table against its compiled contract",
+        "description": "Compiles the page's lexon item, then drives the class through every scenario of the page's behaviour table (a code item holding JSON with `scenarios`), or of the table on another page named by `table`. Each scenario constructs the contract, calls clauses as named callers, and states what must then hold. Nothing is written: the run happens in a temporary module and is discarded. Read-only.",
+        "x-fedwiki-read-only": true,
+        "x-fedwiki-context": ["origin", "status"],
+        "parameters": [
+          {"name": "slug", "in": "query", "required": true, "description": "The page whose lexon item to run.", "schema": {"type": "string"}},
+          {"name": "id", "in": "query", "required": false, "description": "A lexon item id, when the page holds more than one.", "schema": {"type": "string"}},
+          {"name": "table", "in": "query", "required": false, "description": "Slug of another page holding the behaviour table.", "schema": {"type": "string"}},
+          {"name": "only", "in": "query", "required": false, "description": "Run one scenario, by name.", "schema": {"type": "string"}}
+        ],
+        "responses": {"200": {"description": "One result per scenario.", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Run"}}}}}
+      }
+    },
+    "/names.json": {
+      "get": {
+        "operationId": "names",
+        "summary": "The contract's names and its permission table",
+        "description": "Parties, terms and clauses as the highlighter finds them, and the permission table: one row per deontic sentence — party, modal, action, condition — under the clause it sits in. No compiler involved. Read-only.",
+        "x-fedwiki-read-only": true,
+        "x-fedwiki-context": ["origin", "status"],
+        "parameters": [
+          {"name": "slug", "in": "query", "required": true, "description": "The page whose lexon item to read.", "schema": {"type": "string"}},
+          {"name": "id", "in": "query", "required": false, "description": "A lexon item id, when the page holds more than one.", "schema": {"type": "string"}}
+        ],
+        "responses": {"200": {"description": "Names and permission rows.", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Names"}}}}}
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Compiled": {"type": "object", "properties": {
+        "ok": {"type": "boolean"}, "page": {"type": "string"}, "slug": {"type": "string"},
+        "class": {"type": ["string", "null"], "description": "The generated class name."},
+        "constructor": {"type": "array", "items": {"type": "string"}, "description": "Constructor parameter names, in order."},
+        "clauses": {"type": "array", "items": {"type": "string"}, "description": "Clause method names, on the class and on its covenant classes."},
+        "javascript": {"type": "string"}, "error": {"type": "string"}, "compiler": {"type": "string"}}},
+      "Run": {"type": "object", "properties": {
+        "ok": {"type": "boolean"}, "passed": {"type": "integer"}, "total": {"type": "integer"}, "compiler": {"type": "string"},
+        "results": {"type": "array", "items": {"type": "object", "properties": {
+          "name": {"type": "string"}, "spec_ref": {"type": ["string", "null"]}, "ok": {"type": "boolean"},
+          "returns": {"type": "array"}, "transfers": {"type": "array"}, "state": {"type": "object"},
+          "failures": {"type": "array", "items": {"type": "string"}}}}}}},
+      "Names": {"type": "object", "properties": {
+        "contract": {"type": ["string", "null"]}, "parties": {"type": "array", "items": {"type": "string"}},
+        "terms": {"type": "array", "items": {"type": "string"}}, "clauses": {"type": "array", "items": {"type": "string"}},
+        "permissions": {"type": "array", "items": {"type": "object", "properties": {
+          "clause": {"type": "string"}, "party": {"type": "string"}, "modal": {"type": "string"}, "action": {"type": "string"}, "when": {"type": "string"}}}}}}
+    }
+  }
+}
